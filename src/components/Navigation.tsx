@@ -13,6 +13,7 @@ export default function Navigation() {
 
   return (
     <nav className="fixed top-0 left-0 w-full z-100 px-8 py-6 flex justify-between items-center mix-blend-difference">
+      {/* Logo on the left */}
       <motion.div 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -23,23 +24,7 @@ export default function Navigation() {
         </a>
       </motion.div>
 
-      {/* Desktop Navigation */}
-      <div className="hidden md:flex gap-12">
-        {navItems.map((item, i) => (
-          <motion.a
-            key={item.name}
-            href={item.href}
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.1 }}
-            className="text-[10px] font-mono tracking-[0.3em] uppercase text-paper/70 hover:text-paper transition-colors py-2"
-          >
-            {item.name}
-          </motion.a>
-        ))}
-      </div>
-
-      {/* Mobile Menu Toggle */}
+      {/* Mobile Menu Toggle (now on the right) */}
       <motion.div 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -51,7 +36,7 @@ export default function Navigation() {
           id="menu-toggle"
         >
           {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          <span>{isOpen ? 'Close' : 'Menu'}</span>
+          <span className="hidden sm:inline">{isOpen ? 'Close' : 'Menu'}</span>
         </button>
       </motion.div>
 
