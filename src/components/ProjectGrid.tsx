@@ -101,28 +101,28 @@ export default function ProjectGrid() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-100 flex items-center justify-center p-4 md:p-12 bg-ink/95 backdrop-blur-xl"
+            className="fixed inset-0 z-100 flex items-center justify-center p-4 md:p-8 bg-ink/95 backdrop-blur-md cursor-zoom-out"
             onClick={() => setSelectedImage(null)}
           >
             <button 
-              className="absolute top-8 right-8 text-paper/50 hover:text-paper p-2 transition-colors z-110"
+              className="absolute top-6 right-6 text-paper/50 hover:text-paper p-2 transition-colors z-110 cursor-pointer"
               onClick={() => setSelectedImage(null)}
             >
               <X className="w-8 h-8" />
             </button>
             
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
+              initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="max-w-[1280px] max-h-full overflow-hidden"
+              exit={{ scale: 0.95, opacity: 0 }}
+              transition={{ type: "spring", damping: 30, stiffness: 300, mass: 0.8 }}
+              className="relative flex items-center justify-center w-full h-full max-w-7xl max-h-[90vh] cursor-default"
               onClick={(e) => e.stopPropagation()}
             >
               <img
                 src={selectedImage}
                 alt="Selected project view"
-                className="w-full h-full object-contain"
+                className="max-w-full max-h-full object-contain shadow-[0_0_50px_rgba(0,0,0,0.5)] select-none"
                 referrerPolicy="no-referrer"
               />
             </motion.div>
