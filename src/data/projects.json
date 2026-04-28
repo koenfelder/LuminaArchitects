@@ -1,0 +1,26 @@
+[
+  {
+    "id": "project-01",
+    "title": "Aetheria Residence",
+    "year": "2024",
+    "location": "Oslo, Norway",
+    "description": "A brutalist concrete villa that seamlessly blends into the rugged coastal landscape, featuring floor-to-ceiling glass and passive solar heating.",
+    "role": "Architectural Design"
+  },
+  {
+    "id": "project-02",
+    "title": "Nexus Office Hub",
+    "year": "2023",
+    "location": "Berlin, Germany",
+    "description": "A multi-use urban structure focusing on vertical gardens and communal workspaces, redesigned for the post-remote-work era.",
+    "role": "Lead Architect, Urban Planning"
+  },
+  {
+    "id": "project-03",
+    "title": "Terra Retreat",
+    "year": "2025",
+    "location": "Atacama Desert, Chile",
+    "description": "An off-grid wellness center constructed primarily from rammed earth and recycled steel, powered entirely by renewable wind energy.",
+    "role": "Sustainable Lead"
+  }
+]

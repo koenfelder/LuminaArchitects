@@ -1,0 +1,133 @@
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { Send, CheckCircle2 } from 'lucide-react';
+
+export default function NewsletterForm() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [isSubscribed, setIsSubscribed] = useState(false);
+  const [storedName, setStoredName] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Retrieve from Web Storage on load
+    const savedName = localStorage.getItem('lumina_user_name');
+    if (savedName) {
+      setStoredName(savedName);
+    }
+  }, []);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name || !email) return;
+
+    // Save to Web Storage
+    localStorage.setItem('lumina_user_name', name);
+    setStoredName(name);
+    setIsSubscribed(true);
+    
+    // Clear form
+    setName('');
+    setEmail('');
+
+    // Reset success state after 5 seconds
+    setTimeout(() => setIsSubscribed(false), 5000);
+  };
+
+  const handleClear = () => {
+    localStorage.removeItem('lumina_user_name');
+    setStoredName(null);
+  };
+
+  return (
+    <section id="newsletter" className="py-24 px-8 md:px-20 bg-ink text-paper overflow-hidden">
+      <div className="max-w-[1280px] mx-auto grid lg:grid-cols-2 gap-20 items-center">
+        <div>
+          <h2 className="text-sm font-mono uppercase tracking-[0.4em] text-gold mb-6">Stay Connected</h2>
+          <h3 className="text-5xl md:text-6xl font-serif mb-8 leading-tight">
+            Elevate your spatial <span className="italic">consciousness</span>.
+          </h3>
+          
+          {storedName ? (
+            <motion.div 
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="p-8 border border-paper/10 bg-paper/5 backdrop-blur-sm space-y-4"
+            >
+              <h4 className="text-2xl font-serif">Welcome back, {storedName}.</h4>
+              <p className="text-paper/60 leading-relaxed">
+                You're currently receiving our bi-monthly newsletter campaigns. We're excited to have you in our creative circle.
+              </p>
+              <button 
+                onClick={handleClear}
+                className="text-xs font-mono uppercase tracking-widest text-gold hover:text-white transition-colors"
+                id="reset-storage"
+              >
+                (Not you? Clear session)
+              </button>
+            </motion.div>
+          ) : (
+            <p className="text-xl text-paper/60 leading-relaxed max-w-lg">
+              Join our exclusive circle for early access to private openings and architectural insights from our lead partners.
+            </p>
+          )}
+        </div>
+
+        <div className="relative">
+          {!storedName && (
+            <motion.form 
+              onSubmit={handleSubmit}
+              className="space-y-8"
+              id="newsletter-form"
+            >
+              <div className="space-y-1">
+                <label className="text-xs font-mono uppercase tracking-widest text-paper/40 ml-1">Your Name</label>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="E.g. Jane Doe"
+                  className="w-full bg-transparent border-b border-paper/20 py-4 text-xl outline-hidden focus:border-gold transition-colors placeholder:text-paper/10"
+                  required
+                />
+              </div>
+              <div className="space-y-1">
+                <label className="text-xs font-mono uppercase tracking-widest text-paper/40 ml-1">Email Address</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="janedoe@yahoo.com"
+                  className="w-full bg-transparent border-b border-paper/20 py-4 text-xl outline-hidden focus:border-gold transition-colors placeholder:text-paper/10"
+                  required
+                />
+              </div>
+              
+              <button 
+                type="submit"
+                className="group flex items-center gap-4 py-4 px-8 border border-paper/20 hover:bg-gold hover:border-gold hover:text-ink transition-all duration-500 rounded-full text-lg"
+              >
+                Join the Perspective
+                <Send className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+              </button>
+            </motion.form>
+          )}
+
+          <AnimatePresence>
+            {isSubscribed && (
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                className="absolute inset-0 bg-gold text-ink flex flex-col items-center justify-center text-center p-8 rounded-2xl"
+              >
+                <CheckCircle2 className="w-16 h-16 mb-4" />
+                <h4 className="text-3xl font-serif mb-2">Thank you, {storedName}.</h4>
+                <p className="font-sans font-medium">Your subscription is active.</p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
+    </section>
+  );
+}
