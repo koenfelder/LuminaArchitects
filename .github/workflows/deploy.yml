@@ -31,10 +31,13 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build
-        run: npm run build
+        run: |
+          npm run build
+          echo "Build finished. Checking dist structure:"
+          ls -R dist/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
