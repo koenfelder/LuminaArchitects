@@ -8,8 +8,9 @@ export default defineConfig(({mode}) => {
   return {
     base: '/LuminaArchitects/',
     plugins: [react(), tailwindcss()],
-    define: {
-      // Definitions
+    build: {
+      outDir: 'dist',
+      assetsDir: 'assets',
     },
     resolve: {
       alias: {

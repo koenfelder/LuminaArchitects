@@ -35,9 +35,10 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Fix permissions
+      - name: Debug Output
         run: |
-          chmod -c -R +rX "dist/" | while read line; do echo "::debug::$line"; done
+          echo "Checking dist contents:"
+          ls -R dist/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
