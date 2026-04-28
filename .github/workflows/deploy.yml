@@ -5,6 +5,12 @@ on:
     branches:
       - main
 
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 permissions:
   contents: read
   pages: write
@@ -29,8 +35,9 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: List dist files (for debugging)
-        run: ls -R dist
+      - name: Fix permissions
+        run: |
+          chmod -c -R +rX "dist/" | while read line; do echo "::debug::$line"; done
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
