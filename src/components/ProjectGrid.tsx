@@ -10,10 +10,10 @@ export default function ProjectGrid() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   useEffect(() => {
-    // Mimicking an API call using fetch to the local JSON
+    // Mimicking an API call using fetch to the public JSON
     const fetchProjects = async () => {
       try {
-        const response = await fetch('/src/data/projects.json');
+        const response = await fetch(`${import.meta.env.BASE_URL}data/projects.json`);
         if (!response.ok) throw new Error('Network response was not ok');
         const data = await response.json();
         // Add fallback images for display
