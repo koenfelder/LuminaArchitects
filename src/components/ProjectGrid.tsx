@@ -43,12 +43,10 @@ export default function ProjectGrid() {
   return (
     <section id="projects" className="py-24 px-8 md:px-20 bg-paper">
       <div className="max-w-[1280px] mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-baseline mb-16 gap-8">
-          <div>
-            <h2 className="text-sm font-mono uppercase tracking-[0.4em] text-gold mb-6">Portfolio</h2>
-            <h3 className="text-5xl md:text-7xl font-serif text-ink">Selected Works</h3>
-          </div>
-          <p className="max-w-md text-ink/60 text-lg leading-relaxed">
+        <div className="mb-20">
+          <h2 className="text-sm font-mono uppercase tracking-[0.4em] text-gold mb-6">Portfolio</h2>
+          <h3 className="text-5xl md:text-8xl font-serif text-ink mb-8 leading-tight">Selected Works</h3>
+          <p className="max-w-2xl text-ink/80 text-xl md:text-2xl font-serif leading-relaxed">
             A curated selection of our most challenging and rewarding commissions across three continents.
           </p>
         </div>
