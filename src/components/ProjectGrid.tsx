@@ -4,19 +4,19 @@ import { motion, AnimatePresence } from 'motion/react';
 import { ArrowUpRight, X } from 'lucide-react';
 
 export default function ProjectGrid() {
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [items, setItems] = useState<Project[]>([]);
+  const [wait, setWait] = useState(true);
+  const [err, setErr] = useState<string | null>(null);
+  const [zoom, setZoom] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchProjects = async () => {
+    const loadData = async () => {
       try {
-        const response = await fetch(`${import.meta.env.BASE_URL}data/projects.json`);
-        if (!response.ok) throw new Error('Query failed');
+        const res = await fetch(`${import.meta.env.BASE_URL}data/projects.json`);
+        if (!res.ok) throw new Error('Query failed');
         
-        const data = await response.json();
-        const projectsWithImages = data.map((p: Project, i: number) => ({
+        const raw = await res.json();
+        const mapped = raw.map((p: Project, i: number) => ({
           ...p,
           imageUrl: [
             "https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format",
@@ -24,20 +24,20 @@ export default function ProjectGrid() {
             "https://images.unsplash.com/photo-1666209282400-c7d956461df0?q=80"
           ][i % 3]
         }));
-        setProjects(projectsWithImages);
-      } catch (err) {
-        setError('Failed to load project gallery.');
-        console.error(err);
+        setItems(mapped);
+      } catch (e) {
+        setErr('Failed to load project gallery.');
+        console.error(e);
       } finally {
-        setLoading(false);
+        setWait(false);
       }
     };
 
-    fetchProjects();
+    loadData();
   }, []);
 
-  if (loading) return <div className="py-24 text-center font-mono opacity-50">Loading archives...</div>;
-  if (error) return <div className="py-24 text-center text-red-500 font-mono">{error}</div>;
+  if (wait) return <div className="py-24 text-center font-mono opacity-50">Loading archives...</div>;
+  if (err) return <div className="py-24 text-center text-red-500 font-mono">{err}</div>;
 
   return (
     <section id="projects" className="py-24 px-8 md:px-20 bg-paper">
@@ -51,23 +51,23 @@ export default function ProjectGrid() {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
-          {projects.map((project, index) => (
+          {items.map((item, i) => (
             <motion.div
-              key={project.id}
+              key={item.id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
+              transition={{ delay: i * 0.1 }}
               className="group cursor-pointer"
-              id={`project-card-${project.id}`}
+              id={`project-card-${item.id}`}
             >
               <div 
                 className="relative aspect-[4/5] overflow-hidden bg-ink/5 mb-6"
-                onClick={() => setSelectedImage(`${project.imageUrl}&w=1600&q=95`)}
+                onClick={() => setZoom(`${item.imageUrl}&w=1600&q=95`)}
               >
                 <img
-                  src={project.imageUrl + "&w=800&q=80"}
-                  alt={project.title}
+                  src={item.imageUrl + "&w=800&q=80"}
+                  alt={item.title}
                   className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
                   referrerPolicy="no-referrer"
                 />
@@ -78,12 +78,12 @@ export default function ProjectGrid() {
               
               <div className="space-y-2">
                 <div className="flex justify-between items-baseline">
-                  <h4 className="text-2xl font-serif text-ink">{project.title}</h4>
-                  <span className="font-mono text-xs opacity-40">{project.year}</span>
+                  <h4 className="text-2xl font-serif text-ink">{item.title}</h4>
+                  <span className="font-mono text-xs opacity-40">{item.year}</span>
                 </div>
-                <p className="text-sm text-ink/50 uppercase tracking-widest">{project.location}</p>
+                <p className="text-sm text-ink/50 uppercase tracking-widest">{item.location}</p>
                 <p className="pt-4 text-ink/70 leading-relaxed line-clamp-3">
-                  {project.description}
+                  {item.description}
                 </p>
               </div>
             </motion.div>
@@ -92,17 +92,17 @@ export default function ProjectGrid() {
       </div>
 
       <AnimatePresence>
-        {selectedImage && (
+        {zoom && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-100 flex items-center justify-center p-4 md:p-8 bg-ink/95 backdrop-blur-md cursor-zoom-out"
-            onClick={() => setSelectedImage(null)}
+            onClick={() => setZoom(null)}
           >
             <button 
               className="absolute top-6 right-6 text-paper/50 hover:text-paper p-2 transition-colors z-110 cursor-pointer"
-              onClick={() => setSelectedImage(null)}
+              onClick={() => setZoom(null)}
             >
               <X className="w-8 h-8" />
             </button>
@@ -111,12 +111,11 @@ export default function ProjectGrid() {
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
-              transition={{ type: "spring", damping: 30, stiffness: 300, mass: 0.8 }}
               className="relative flex items-center justify-center w-full h-full max-w-7xl max-h-[90vh] cursor-default"
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e) => { e.stopPropagation(); }}
             >
               <img
-                src={selectedImage}
+                src={zoom}
                 alt="Selected project view"
                 className="max-w-full max-h-full object-contain shadow-[0_0_50px_rgba(0,0,0,0.5)] select-none"
                 referrerPolicy="no-referrer"
