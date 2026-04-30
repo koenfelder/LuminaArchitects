@@ -80,7 +80,6 @@ export default function HeroCarousel() {
         </motion.div>
       </div>
 
-      {/* Controls */}
       <div className="absolute bottom-8 right-8 z-20 flex gap-4 md:right-20">
         <button
           onClick={prevSlide}
@@ -98,7 +97,6 @@ export default function HeroCarousel() {
         </button>
       </div>
 
-      {/* Progress Dots */}
       <div className="absolute left-8 bottom-8 z-20 flex gap-2 md:left-20">
         {slides.map((_, i) => (
           <div

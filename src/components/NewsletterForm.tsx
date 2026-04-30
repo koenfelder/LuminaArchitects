@@ -9,27 +9,21 @@ export default function NewsletterForm() {
   const [storedName, setStoredName] = useState<string | null>(null);
 
   useEffect(() => {
-    // Retrieve from Web Storage on load
     const savedName = localStorage.getItem('lumina_user_name');
-    if (savedName) {
-      setStoredName(savedName);
-    }
+    if (savedName) setStoredName(savedName);
   }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !email) return;
 
-    // Save to Web Storage
     localStorage.setItem('lumina_user_name', name);
     setStoredName(name);
     setIsSubscribed(true);
     
-    // Clear form
     setName('');
     setEmail('');
 
-    // Reset success state after 5 seconds
     setTimeout(() => setIsSubscribed(false), 5000);
   };
 
@@ -72,59 +66,60 @@ export default function NewsletterForm() {
           )}
         </div>
 
-        <div className="relative">
-          {!storedName && (
-            <motion.form 
-              onSubmit={handleSubmit}
-              className="space-y-8"
-              id="newsletter-form"
-            >
-              <div className="space-y-1">
-                <label className="text-xs font-mono uppercase tracking-widest text-paper/40 ml-1">Your Name</label>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="E.g. Jane Doe"
-                  className="w-full bg-transparent border-b border-paper/20 py-4 text-xl outline-hidden focus:border-gold transition-colors placeholder:text-paper/10"
-                  required
-                />
-              </div>
-              <div className="space-y-1">
-                <label className="text-xs font-mono uppercase tracking-widest text-paper/40 ml-1">Email Address</label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="janedoe@yahoo.com"
-                  className="w-full bg-transparent border-b border-paper/20 py-4 text-xl outline-hidden focus:border-gold transition-colors placeholder:text-paper/10"
-                  required
-                />
-              </div>
-              
-              <button 
-                type="submit"
-                className="group flex items-center gap-4 py-4 px-8 border border-paper/20 hover:bg-gold hover:border-gold hover:text-ink transition-all duration-500 rounded-full text-lg"
+        <div className="relative min-h-[400px] flex items-center">
+          <AnimatePresence mode="wait">
+            {!storedName ? (
+              <motion.form 
+                key="form"
+                onSubmit={handleSubmit}
+                className="w-full space-y-8"
+                id="newsletter-form"
+                exit={{ opacity: 0, y: -20 }}
               >
-                Join the Perspective
-                <Send className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-              </button>
-            </motion.form>
-          )}
-
-          <AnimatePresence>
-            {isSubscribed && (
+                <div className="space-y-1">
+                  <label className="text-xs font-mono uppercase tracking-widest text-paper/40 ml-1">Your Name</label>
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="E.g. Jane Doe"
+                    className="w-full bg-transparent border-b border-paper/20 py-4 text-xl outline-hidden focus:border-gold transition-colors placeholder:text-paper/10"
+                    required
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-xs font-mono uppercase tracking-widest text-paper/40 ml-1">Email Address</label>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="janedoe@yahoo.com"
+                    className="w-full bg-transparent border-b border-paper/20 py-4 text-xl outline-hidden focus:border-gold transition-colors placeholder:text-paper/10"
+                    required
+                  />
+                </div>
+                
+                <button 
+                  type="submit"
+                  className="group flex items-center gap-4 py-4 px-8 border border-paper/20 hover:bg-gold hover:border-gold hover:text-ink transition-all duration-500 rounded-full text-lg"
+                >
+                  Join the Perspective
+                  <Send className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                </button>
+              </motion.form>
+            ) : isSubscribed ? (
               <motion.div 
-                initial={{ opacity: 0, scale: 0.9 }}
+                key="success"
+                initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                className="absolute inset-0 bg-gold text-ink flex flex-col items-center justify-center text-center p-8 rounded-2xl"
+                exit={{ opacity: 0, scale: 0.95 }}
+                className="w-full bg-gold text-ink flex flex-col items-center justify-center text-center p-12 py-20 rounded-2xl shadow-2xl"
               >
-                <CheckCircle2 className="w-16 h-16 mb-4" />
-                <h4 className="text-3xl font-serif mb-2">Thank you, {storedName}.</h4>
-                <p className="font-sans font-medium">Your subscription is active.</p>
+                <CheckCircle2 className="w-16 h-16 mb-6" />
+                <h4 className="text-3xl md:text-4xl font-serif mb-4">Thank you, {storedName}.</h4>
+                <p className="text-lg font-sans font-medium">Your subscription is active.</p>
               </motion.div>
-            )}
+            ) : null}
           </AnimatePresence>
         </div>
       </div>

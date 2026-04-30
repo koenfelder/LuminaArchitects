@@ -13,7 +13,6 @@ export default function Navigation() {
 
   return (
     <nav className="fixed top-0 left-0 w-full z-100 px-8 py-6 flex justify-between items-center mix-blend-difference">
-      {/* Logo on the left */}
       <motion.div 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -24,7 +23,6 @@ export default function Navigation() {
         </a>
       </motion.div>
 
-      {/* Mobile Menu Toggle (now on the right) */}
       <motion.div 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -40,7 +38,6 @@ export default function Navigation() {
         </button>
       </motion.div>
 
-      {/* Mobile/Overlay Dropdown Menu */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -63,17 +60,6 @@ export default function Navigation() {
                 {item.name}
               </motion.a>
             ))}
-            
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6 }}
-              className="mt-12 flex gap-8 font-mono text-[10px] tracking-[0.4em] uppercase text-paper/40"
-            >
-              <span>Oslo</span>
-              <span>Berlin</span>
-              <span>Atacama</span>
-            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

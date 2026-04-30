@@ -10,13 +10,12 @@ export default function ProjectGrid() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   useEffect(() => {
-    // Mimicking an API call using fetch to the public JSON
     const fetchProjects = async () => {
       try {
         const response = await fetch(`${import.meta.env.BASE_URL}data/projects.json`);
-        if (!response.ok) throw new Error('Network response was not ok');
+        if (!response.ok) throw new Error('Query failed');
+        
         const data = await response.json();
-        // Add fallback images for display
         const projectsWithImages = data.map((p: Project, i: number) => ({
           ...p,
           imageUrl: [
@@ -27,7 +26,7 @@ export default function ProjectGrid() {
         }));
         setProjects(projectsWithImages);
       } catch (err) {
-        setError('Failed to load projects. Please ensure the project data exists.');
+        setError('Failed to load project gallery.');
         console.error(err);
       } finally {
         setLoading(false);
@@ -45,7 +44,7 @@ export default function ProjectGrid() {
       <div className="max-w-[1280px] mx-auto">
         <div className="mb-20">
           <h2 className="text-sm font-mono uppercase tracking-[0.4em] text-gold mb-6">Portfolio</h2>
-          <h3 className="text-5xl md:text-8xl font-serif text-ink mb-8 leading-tight">Selected Works</h3>
+          <h3 className="text-5xl md:text-8xl font-serif text-ink mb-8 leading-tight">Featured Projects</h3>
           <p className="max-w-2xl text-ink/80 text-xl md:text-2xl font-serif leading-relaxed">
             A curated selection of our most challenging and rewarding commissions across three continents.
           </p>
@@ -92,7 +91,6 @@ export default function ProjectGrid() {
         </div>
       </div>
 
-      {/* Lightbox Modal */}
       <AnimatePresence>
         {selectedImage && (
           <motion.div
